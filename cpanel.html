@@ -9,19 +9,17 @@
 </head>
 <body class="cpanel-body">
 
-    <!-- OVERLAY BLOKIR JIKA EXPIRED -->
+    <!-- OVERLAY JIKA EXPIRED -->
     <div id="suspendedOverlay" class="suspended-overlay">
         <div class="suspended-box">
             <i class="fa-solid fa-ban fa-4x"></i>
             <h1>ACCOUNT SUSPENDED</h1>
             <p>Akun ini telah dinonaktifkan karena masa aktif habis (Expired).</p>
-            <hr>
             <p><small>Silakan hubungi Owner untuk perpanjangan layanan.</small></p>
             <button onclick="window.close()" class="btn-close-overlay">Tutup Halaman</button>
         </div>
     </div>
 
-    <!-- Interface cPanel Normal -->
     <header class="cpanel-header">
         <div class="logo">
             <i class="fa-brands fa-cpanel fa-2x"></i> <span>cPanel</span>
@@ -39,8 +37,20 @@
                 <ul class="info-list">
                     <li><i class="fa-solid fa-user"></i> <span id="cpUserSide">...</span></li>
                     <li><i class="fa-solid fa-globe"></i> <span id="cpDomain">...</span></li>
-                    <li><i class="fa-solid fa-house"></i> /home/<span id="cpHome">...</span></li>
-                    <li><i class="fa-solid fa-server"></i> 192.168.1.10</li>
+                    
+                    <!-- INFO KONEKSI SERVER -->
+                    <li style="border-top:1px solid #eee; padding-top:10px; margin-top:10px;">
+                        <i class="fa-solid fa-server"></i> 
+                        <span style="font-size:11px; color:#555;">Shared IP Address</span><br>
+                        <strong id="cpIP" style="margin-left:24px;">...</strong>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-link"></i> 
+                        <span style="font-size:11px; color:#555;">Server Panel (PLTA)</span><br>
+                        <strong id="cpPanelUrl" style="margin-left:24px;">...</strong>
+                    </li>
+
+                    <li style="margin-top:10px;"><i class="fa-solid fa-house"></i> /home/<span id="cpHome">...</span></li>
                 </ul>
             </div>
         </aside>
@@ -67,14 +77,6 @@
                     <div class="grid-item"><i class="fas fa-database"></i><span>phpMyAdmin</span></div>
                     <div class="grid-item"><i class="fas fa-server"></i><span>MySQL DB</span></div>
                     <div class="grid-item"><i class="fas fa-wand-magic-sparkles"></i><span>DB Wizard</span></div>
-                </div>
-            </div>
-
-             <div class="section-group">
-                <h2 class="section-title">DOMAINS</h2>
-                <div class="grid-container">
-                    <div class="grid-item"><i class="fas fa-globe"></i><span>Domains</span></div>
-                    <div class="grid-item"><i class="fas fa-share-nodes"></i><span>Redirects</span></div>
                 </div>
             </div>
         </main>
