@@ -15,6 +15,11 @@
             <i class="fa-solid fa-network-wired"></i> <span>MasterControl</span>
         </div>
         <div class="user-info">
+            <!-- Indikator Koneksi Server -->
+            <div id="serverStatusDisplay" class="server-status-pill offline">
+                <i class="fa-solid fa-circle-nodes"></i> No Connection
+            </div>
+            
             <span id="displayRole" class="role-badge">...</span>
             <span id="displayUser">...</span>
             <button id="logoutBtn" class="btn-logout" title="Logout"><i class="fa-solid fa-power-off"></i></button>
@@ -30,9 +35,11 @@
                     <li onclick="switchTab('panels')">
                         <a href="#" id="tab-panels" class="active"><i class="fa-solid fa-server"></i> Kelola Panel</a>
                     </li>
-                    <!-- Menu khusus Owner -->
                     <li id="ownerMenu" style="display:none;" onclick="switchTab('users')">
                         <a href="#" id="tab-users"><i class="fa-solid fa-users-gear"></i> Kelola Staff</a>
+                    </li>
+                    <li id="serverMenu" onclick="switchTab('server')">
+                        <a href="#" id="tab-server"><i class="fa-solid fa-gears"></i> Konfigurasi VPS</a>
                     </li>
                 </ul>
             </div>
@@ -40,9 +47,10 @@
             <div class="info-box">
                 <h3>SERVER INFO</h3>
                 <div class="stat-item">
-                    <span>Server Load</span>
-                    <div class="progress-bar"><div class="fill" style="width: 25%;"></div></div>
-                    <small>System Normal</small>
+                    <span>IP Address:</span> <strong id="sidebarIP" style="color:#27ae60;">-</strong>
+                </div>
+                <div class="stat-item">
+                    <span>PLTA Domain:</span> <strong id="sidebarDomain" style="color:#2980b9;">-</strong>
                 </div>
             </div>
         </aside>
@@ -50,7 +58,7 @@
         <!-- Main Content -->
         <main class="main-content">
             
-            <!-- SECTION 1: KELOLA PANEL (Website) -->
+            <!-- TAB 1: KELOLA PANEL -->
             <div id="section-panels" class="tab-content">
                 <div class="header-action">
                     <h2>Daftar Website / Panel</h2>
@@ -70,8 +78,8 @@
                             <tr>
                                 <th>Domain</th>
                                 <th>Username</th>
+                                <th>Connected IP</th>
                                 <th>Status</th>
-                                <th>Dibuat Oleh</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -81,7 +89,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: KELOLA STAFF (Hanya Owner) -->
+            <!-- TAB 2: KELOLA STAFF (Owner Only) -->
             <div id="section-users" class="tab-content" style="display:none;">
                 <div class="header-action">
                     <h2>Manajemen Staff (Admin/Reseller)</h2>
@@ -89,7 +97,6 @@
                         <i class="fa-solid fa-user-plus"></i> Tambah Staff
                     </button>
                 </div>
-
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
@@ -106,16 +113,37 @@
                 </div>
             </div>
 
+            <!-- TAB 3: KONFIGURASI VPS -->
+            <div id="section-server" class="tab-content" style="display:none;">
+                <div class="header-action">
+                    <h2>Koneksi Server & Domain Panel</h2>
+                </div>
+                <div class="info-box" style="max-width: 600px;">
+                    <form id="serverConfigForm">
+                        <div class="form-group">
+                            <label>IP VPS (Server Host)</label>
+                            <input type="text" id="confIP" placeholder="103.xxx.xxx.xxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Domain Panel / PLTA</label>
+                            <input type="text" id="confDomain" placeholder="panel.domainanda.com" required>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn-create" style="width:100%; justify-content:center;">
+                            <i class="fa-solid fa-link"></i> SIMPAN KONEKSI
+                        </button>
+                    </form>
+                </div>
+            </div>
+
         </main>
     </div>
 
-    <!-- MODAL BUAT PANEL -->
+    <!-- MODAL POPUP: Create Panel -->
     <div id="panelModal" class="modal">
         <div class="modal-content slide-down">
             <span class="close-btn" onclick="closeModal('panelModal')">&times;</span>
-            <div class="modal-header">
-                <i class="fa-brands fa-cpanel"></i> Buat Panel Baru
-            </div>
+            <div class="modal-header"><i class="fa-brands fa-cpanel"></i> Buat Panel Baru</div>
             <form id="createPanelForm">
                 <div class="form-group">
                     <label>Domain Website</label>
@@ -128,8 +156,8 @@
                 <div class="form-group">
                     <label>Status</label>
                     <select id="pStatus">
-                        <option value="Active">Active (Aktif)</option>
-                        <option value="Expired">Expired (Nonaktif)</option>
+                        <option value="Active">Active</option>
+                        <option value="Expired">Expired</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-submit">Simpan Data</button>
@@ -137,21 +165,19 @@
         </div>
     </div>
 
-    <!-- MODAL BUAT STAFF -->
+    <!-- MODAL POPUP: Create User -->
     <div id="userModal" class="modal">
         <div class="modal-content slide-down">
             <span class="close-btn" onclick="closeModal('userModal')">&times;</span>
-            <div class="modal-header">
-                <i class="fa-solid fa-user-shield"></i> Tambah Staff
-            </div>
+            <div class="modal-header"><i class="fa-solid fa-user-shield"></i> Tambah Staff</div>
             <form id="createUserForm">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" id="uName" placeholder="admin1" required>
+                    <input type="text" id="uName" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="text" id="uPass" placeholder="pass123" required>
+                    <input type="text" id="uPass" required>
                 </div>
                 <div class="form-group">
                     <label>Role</label>
