@@ -1,0 +1,191 @@
+/* style.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #ff6c2c; /* Warna oranye khas cPanel lama, atau ganti biru */
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+header .logout-btn {
+    background: #d35400;
+    color: white;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-left: 15px;
+}
+
+/* Layout Utama */
+.container {
+    display: flex;
+    flex-direction: row-reverse; /* Sidebar di kanan */
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+.info-box {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.info-box h3 {
+    margin-top: 0;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-box ul {
+    list-style: none;
+    padding: 0;
+    font-size: 13px;
+}
+
+.info-box ul li {
+    margin-bottom: 8px;
+    word-break: break-all;
+}
+
+/* Progress Bar Statistik */
+.stat-item {
+    margin-bottom: 15px;
+}
+.progress-bar {
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+.fill {
+    background: #27ae60;
+    height: 100%;
+}
+
+/* Konten Utama */
+.main-content {
+    flex-grow: 1;
+}
+
+/* Pencarian */
+.search-bar {
+    position: relative;
+    margin-bottom: 25px;
+}
+.search-bar input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.search-bar i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+/* Grid Menu */
+.section-group {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.grid-item {
+    text-align: center;
+}
+
+.grid-item a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.grid-item a:hover {
+    background-color: #f0f8ff;
+    color: #0056b3;
+}
+
+.grid-item i {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.grid-item a:hover i {
+    color: #0056b3;
+}
+
+.item-name {
+    font-size: 13px;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Responsif untuk HP */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+    }
+}
