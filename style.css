@@ -15,41 +15,26 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-co
 .login-body {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
 }
 .login-container {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    width: 360px;
-    text-align: center;
+    background: white; padding: 40px; border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 360px; text-align: center;
     animation: fadeIn 0.8s ease;
 }
 .icon-circle {
-    background: #eef2f7;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 15px;
-    color: var(--primary);
+    background: #eef2f7; width: 80px; height: 80px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: var(--primary);
 }
 .input-group { position: relative; margin-bottom: 20px; }
 .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa; }
 .input-group input, .input-group select {
-    width: 100%; padding: 12px 15px 12px 45px;
-    border: 1px solid #ddd; border-radius: 8px;
-    outline: none; transition: 0.3s;
+    width: 100%; padding: 12px 15px 12px 45px; border: 1px solid #ddd; border-radius: 8px; outline: none; transition: 0.3s;
 }
 .input-group input:focus { border-color: var(--secondary); box-shadow: 0 0 5px rgba(52,152,219,0.3); }
 .btn-login {
-    width: 100%; padding: 12px;
-    background: var(--primary); color: white;
-    border: none; border-radius: 8px;
-    font-size: 16px; font-weight: bold;
-    cursor: pointer; transition: 0.3s;
+    width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px;
+    font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s;
     display: flex; justify-content: center; align-items: center; gap: 10px;
 }
 .btn-login:hover { background: #1a252f; transform: translateY(-2px); }
@@ -57,34 +42,32 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-co
 
 /* --- DASHBOARD & CPANEL --- */
 header {
-    background: var(--primary); color: white;
-    padding: 0 20px; height: 60px;
-    display: flex; justify-content: space-between; align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background: var(--primary); color: white; padding: 0 20px; height: 60px;
+    display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .cpanel-header { background: var(--cpanel-orange); }
 .logo { font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
 .user-info { display: flex; align-items: center; gap: 15px; font-size: 14px; }
 .role-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
 
+/* Server Status Pill */
+.server-status-pill { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px; margin-right: 15px; }
+.server-status-pill.offline { background: #e74c3c; color: white; }
+.server-status-pill.online { background: #27ae60; color: white; border: 1px solid #1e8449; }
+
 .container { display: flex; max-width: 1200px; margin: 30px auto; gap: 25px; padding: 0 15px; }
 .sidebar { width: 280px; flex-shrink: 0; }
 .main-content { flex-grow: 1; }
 
-.info-box {
-    background: white; padding: 20px;
-    border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
+.info-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
 .info-box h3 { font-size: 12px; color: #888; margin: 0 0 15px 0; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
 
-/* Menu List */
+/* Menu */
 .menu-list { list-style: none; padding: 0; margin: 0; }
 .menu-list li { margin-bottom: 5px; }
 .menu-list a {
-    display: block; padding: 10px 15px;
-    text-decoration: none; color: #555;
-    border-radius: 6px; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+    display: block; padding: 10px 15px; text-decoration: none; color: #555; border-radius: 6px; transition: 0.2s;
+    display: flex; align-items: center; gap: 10px;
 }
 .menu-list a:hover, .menu-list a.active { background: #eef2f7; color: var(--primary); font-weight: 600; }
 .info-list { list-style: none; padding: 0; font-size: 13px; }
@@ -93,6 +76,7 @@ header {
 /* Tables & Buttons */
 .header-action { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .header-action h2 { margin: 0; font-size: 20px; color: var(--primary); }
+.btn-group { display: flex; gap: 10px; }
 .btn-create { background: var(--success); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .btn-create:hover { background: #219150; }
 .btn-danger { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
@@ -138,17 +122,14 @@ header {
 .btn-submit { width: 100%; padding: 12px; background: var(--secondary); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 .btn-submit:hover { background: #2980b9; }
 .form-group label { font-size: 13px; font-weight: 600; margin-bottom: 5px; display: block; color: #555; }
+.form-group input { margin-bottom: 10px; }
 
-/* Animations */
 @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 .slide-down { animation: slideDown 0.3s ease-out; }
 @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* Responsive */
 @media (max-width: 768px) {
     .container { flex-direction: column; }
     .sidebar { width: 100%; }
     .header-action { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .btn-group { width: 100%; display: flex; gap: 10px; }
-    .btn-group button { flex: 1; justify-content: center; }
 }
