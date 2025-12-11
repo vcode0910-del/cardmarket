@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Login - Hosting Panel</title>
+    <title>Login - Panel Access</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-body">
+<body>
+    <!-- Tombol Tema Absolut -->
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <button id="themeToggle" class="btn btn-outline" style="background: white;"><i class="fa-solid fa-moon"></i></button>
+    </div>
 
-    <div class="login-container">
-        <div class="login-header">
-            <div class="icon-circle">
-                <i class="fa-solid fa-fingerprint fa-2x"></i>
+    <div class="login-wrap">
+        <div class="card login-box">
+            <div style="margin-bottom: 20px; color: var(--secondary);">
+                <i class="fa-solid fa-shield-halved fa-3x"></i>
             </div>
-            <h2>Authentication</h2>
-            <p>Panel Management System</p>
-        </div>
-        
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="text" id="loginUser" placeholder="Email / Username" required autocomplete="off">
-            </div>
+            <h2 style="margin: 0 0 10px 0;">Secure Access</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Login untuk mengelola VPS & Panel</p>
             
-            <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" id="loginPass" placeholder="Password" required>
-            </div>
-
-            <button type="submit" class="btn-login">
-                <span>MASUK SYSTEM</span>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </form>
-        
-        <div class="login-footer">
-            <small>Restricted Access Area</small>
+            <form id="loginForm">
+                <div style="text-align: left;">
+                    <label>Username / Email</label>
+                    <input type="text" id="loginUser" placeholder="admin" required>
+                </div>
+                <div style="text-align: left;">
+                    <label>Password</label>
+                    <input type="password" id="loginPass" placeholder="••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" style="margin-top: 10px;">
+                    LOGIN SYSTEM <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
         </div>
     </div>
 
