@@ -2,19 +2,23 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>cPanel Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Overlay jika SUSPENDED/EXPIRED -->
+    <div id="suspendedOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; text-align:center; padding-top:100px;">
+        <i class="fa-solid fa-triangle-exclamation fa-5x" style="color:red;"></i>
+        <h1 style="color:red;">ACCOUNT SUSPENDED</h1>
+        <p>Akun hosting ini telah kedaluwarsa (Expired).</p>
+        <p>Silakan hubungi Owner untuk perpanjangan.</p>
+        <button onclick="window.close()" style="padding:10px 20px; margin-top:20px; cursor:pointer;">Tutup Halaman</button>
+    </div>
 
     <header class="cpanel-header">
-        <div class="logo">
-            <i class="fa-brands fa-cpanel fa-2x"></i> <span>cPanel</span>
-        </div>
+        <div class="logo"><i class="fa-brands fa-cpanel fa-2x"></i> <span>cPanel</span></div>
         <div class="user-info">
-            <!-- Data ini akan berubah dinamis lewat JS -->
             <span><i class="fa-user"></i> <b id="cpUser">loading...</b></span>
             <button onclick="window.close()" class="logout-btn">Close</button>
         </div>
@@ -23,40 +27,20 @@
     <div class="container">
         <aside class="sidebar">
             <div class="info-box">
-                <h3>GENERAL INFORMATION</h3>
-                <ul>
-                    <li><strong>Current User:</strong> <span id="cpUserSidebar">...</span></li>
-                    <li><strong>Primary Domain:</strong> <span id="cpDomain">...</span></li>
-                    <li><strong>Home Dir:</strong> /home/<span id="cpHome">...</span></li>
-                </ul>
+                <h3>INFO</h3>
+                <ul><li>Domain: <span id="cpDomain">...</span></li></ul>
             </div>
         </aside>
-
         <main class="main-content">
-            <div class="search-bar">
-                <i class="fa-search"></i>
-                <input type="text" placeholder="Search features...">
-            </div>
-
             <div class="section-group">
-                <h2 class="section-title">FILES</h2>
+                <h2 class="section-title">FILES & DATABASE</h2>
                 <div class="grid-container">
                     <div class="grid-item"><i class="fas fa-folder"></i><span>File Manager</span></div>
-                    <div class="grid-item"><i class="fas fa-image"></i><span>Images</span></div>
-                    <div class="grid-item"><i class="fas fa-hdd"></i><span>Disk Usage</span></div>
-                </div>
-            </div>
-
-            <div class="section-group">
-                <h2 class="section-title">DATABASES</h2>
-                <div class="grid-container">
                     <div class="grid-item"><i class="fas fa-database"></i><span>phpMyAdmin</span></div>
-                    <div class="grid-item"><i class="fas fa-server"></i><span>MySQL DB</span></div>
                 </div>
             </div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
