@@ -1,226 +1,253 @@
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
 
-    // --- CREDENTIALS OWNER ---
-    const OWNER_CREDENTIALS = {
-        email: "zoraaacnl@owner.com",
-        password: "GHERY0987"
-    };
+    // --- 1. DARK MODE LOGIC ---
+    const themeBtn = document.getElementById('themeToggle');
+    const currentTheme = localStorage.getItem('theme');
 
-    // ==========================================
-    // 1. HALAMAN LOGIN
-    // ==========================================
+    function applyTheme(isDark) {
+        if (isDark) {
+            document.body.setAttribute('data-theme', 'dark');
+            if(themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.body.removeAttribute('data-theme');
+            if(themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    // Init Theme
+    applyTheme(currentTheme === 'dark');
+
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                localStorage.setItem('theme', 'light');
+                applyTheme(false);
+            } else {
+                localStorage.setItem('theme', 'dark');
+                applyTheme(true);
+            }
+        });
+    }
+
+    // --- CREDENTIALS ---
+    const OWNER_EMAIL = "zoraaacnl@owner.com";
+    const OWNER_PASS = "GHERY0987";
+
+    // --- PAGE: LOGIN ---
     if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
         const form = document.getElementById('loginForm');
         if (form) {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const userIn = document.getElementById('loginUser').value;
-                const passIn = document.getElementById('loginPass').value;
-                
-                // Cek Owner
-                if (userIn === OWNER_CREDENTIALS.email && passIn === OWNER_CREDENTIALS.password) {
-                    sessionStorage.setItem('activeUser', 'Owner');
-                    sessionStorage.setItem('activeRole', 'owner');
-                    window.location.href = 'dashboard.html';
+                const u = document.getElementById('loginUser').value;
+                const p = document.getElementById('loginPass').value;
+
+                // Check Owner
+                if (u === OWNER_EMAIL && p === OWNER_PASS) {
+                    setSession('Owner', 'owner');
                     return;
                 }
 
-                // Cek Staff (Local Storage)
-                const staffList = JSON.parse(localStorage.getItem('myStaff')) || [];
-                const foundStaff = staffList.find(s => s.username === userIn && s.password === passIn);
+                // Check Staff
+                const staffs = JSON.parse(localStorage.getItem('db_staffs')) || [];
+                const staff = staffs.find(s => s.username === u && s.password === p);
                 
-                if (foundStaff) {
-                    sessionStorage.setItem('activeUser', foundStaff.username);
-                    sessionStorage.setItem('activeRole', foundStaff.role);
-                    window.location.href = 'dashboard.html';
+                if (staff) {
+                    setSession(staff.username, staff.role);
                 } else {
-                    const btn = document.querySelector('.btn-login');
-                    btn.innerHTML = 'AKSES DITOLAK';
-                    btn.style.background = '#e74c3c';
-                    setTimeout(() => {
-                        btn.innerHTML = '<span>MASUK SYSTEM</span><i class="fa-solid fa-arrow-right"></i>';
-                        btn.style.background = '';
-                    }, 2000);
+                    alert("Akses Ditolak: Username atau Password salah.");
                 }
             });
         }
     }
 
-    // ==========================================
-    // 2. DASHBOARD
-    // ==========================================
+    // --- PAGE: DASHBOARD ---
     if (path.includes('dashboard.html')) {
         const user = sessionStorage.getItem('activeUser');
         const role = sessionStorage.getItem('activeRole');
         
-        if (!user || !role) { window.location.href = 'index.html'; return; }
+        if (!user) { window.location.href = 'index.html'; return; }
 
         document.getElementById('displayUser').innerText = user;
         document.getElementById('displayRole').innerText = role.toUpperCase();
 
+        // Role Based UI
         if (role === 'owner') {
-            document.getElementById('ownerMenu').style.display = 'block';
-            document.getElementById('cleanExpBtn').style.display = 'flex';
+            document.getElementById('menuUsers').classList.remove('hidden');
+            document.getElementById('cleanExpBtn').classList.remove('hidden');
         }
 
-        loadServerConfig();
-        renderPanels(role);
-
-        // --- Create Panel ---
-        document.getElementById('openPanelModal').onclick = () => showModal('panelModal');
-        document.getElementById('createPanelForm').addEventListener('submit', function(e) {
+        // Load Config & Data
+        loadServerInfo();
+        renderPanels();
+        
+        // Form: Create Panel (New Format)
+        document.getElementById('formCreatePanel').addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Ambil Config Server Aktif
-            const serverConfig = JSON.parse(localStorage.getItem('serverConfig')) || { ip: '127.0.0.1', domain: 'localhost' };
+            // Validasi Input Limits
+            const cpu = parseInt(document.getElementById('pCpu').value);
+            const ram = parseInt(document.getElementById('pRam').value);
+            const disk = parseInt(document.getElementById('pDisk').value);
 
-            const panels = JSON.parse(localStorage.getItem('myPanels')) || [];
+            if (cpu > 95) { alert("CPU tidak boleh lebih dari 95%!"); return; }
+            if (ram > 5000) { alert("RAM tidak boleh lebih dari 5000 MB!"); return; }
+            if (disk > 10000) { alert("Disk tidak boleh lebih dari 10000 MB!"); return; }
+
+            const serverConf = JSON.parse(localStorage.getItem('db_server')) || { ip: 'Unset', plta: 'Unset' };
+            const panels = JSON.parse(localStorage.getItem('db_panels')) || [];
+
             panels.push({
                 id: Date.now(),
-                domain: document.getElementById('pDomain').value,
-                username: document.getElementById('pUser').value,
-                status: document.getElementById('pStatus').value,
-                creator: role + ` (${user})`,
-                connectedIP: serverConfig.ip,
-                connectedDomain: serverConfig.domain
+                user: document.getElementById('pUser').value,
+                pass: document.getElementById('pPass').value,
+                res: { cpu, ram, disk },
+                egg: document.getElementById('pEgg').value,
+                status: 'Active',
+                creator: user,
+                nodeIP: serverConf.ip,
+                nodePLTA: serverConf.plta
             });
 
-            localStorage.setItem('myPanels', JSON.stringify(panels));
-            closeModal('panelModal');
-            renderPanels(role);
-            this.reset();
+            localStorage.setItem('db_panels', JSON.stringify(panels));
+            closeModal('modalCreatePanel');
+            renderPanels();
+            e.target.reset();
         });
 
-        // --- Save Server Config ---
-        const serverForm = document.getElementById('serverConfigForm');
-        if(serverForm) {
-            serverForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const config = {
-                    ip: document.getElementById('confIP').value,
-                    domain: document.getElementById('confDomain').value
-                };
-                localStorage.setItem('serverConfig', JSON.stringify(config));
-                alert("Koneksi Server Berhasil Disimpan!");
-                loadServerConfig();
-            });
-        }
-
-        // --- Owner Features (Staff & Clean) ---
-        if (role === 'owner') {
-            document.getElementById('openUserModal').onclick = () => showModal('userModal');
-            document.getElementById('createUserForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const staff = JSON.parse(localStorage.getItem('myStaff')) || [];
-                staff.push({
-                    id: Date.now(),
-                    username: document.getElementById('uName').value,
-                    password: document.getElementById('uPass').value,
-                    role: document.getElementById('uRole').value
-                });
-                localStorage.setItem('myStaff', JSON.stringify(staff));
-                closeModal('userModal');
-                renderStaff();
-                this.reset();
-            });
-
-            document.getElementById('cleanExpBtn').onclick = function() {
-                if(confirm('Hapus SEMUA panel expired secara permanen?')) {
-                    let panels = JSON.parse(localStorage.getItem('myPanels')) || [];
-                    panels = panels.filter(p => p.status !== 'Expired');
-                    localStorage.setItem('myPanels', JSON.stringify(panels));
-                    renderPanels(role);
-                }
+        // Form: Server Config
+        document.getElementById('formServerConfig').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const config = {
+                ip: document.getElementById('confIP').value,
+                plta: document.getElementById('confPLTA').value
             };
-        }
+            localStorage.setItem('db_server', JSON.stringify(config));
+            alert("Konfigurasi Server Disimpan!");
+            loadServerInfo();
+        });
 
-        document.getElementById('logoutBtn').onclick = () => { sessionStorage.clear(); window.location.href = 'index.html'; };
+        // Form: Create Staff
+        document.getElementById('formCreateUser').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const staffs = JSON.parse(localStorage.getItem('db_staffs')) || [];
+            staffs.push({
+                id: Date.now(),
+                username: document.getElementById('uName').value,
+                password: document.getElementById('uPass').value,
+                role: document.getElementById('uRole').value
+            });
+            localStorage.setItem('db_staffs', JSON.stringify(staffs));
+            closeModal('modalCreateUser');
+            if(!document.getElementById('tab-users').classList.contains('hidden')) renderStaffs();
+            e.target.reset();
+        });
+        
+        // Clean Expired Button
+        document.getElementById('cleanExpBtn').onclick = () => {
+            if(confirm("Hapus semua panel EXPIRED?")) {
+                let panels = JSON.parse(localStorage.getItem('db_panels')) || [];
+                panels = panels.filter(p => p.status !== 'Expired');
+                localStorage.setItem('db_panels', JSON.stringify(panels));
+                renderPanels();
+            }
+        };
+
+        // Logout
+        document.getElementById('logoutBtn').onclick = () => {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        };
     }
 
-    // ==========================================
-    // 3. CPANEL PAGE
-    // ==========================================
+    // --- PAGE: CPANEL ---
     if (path.includes('cpanel.html')) {
         const params = new URLSearchParams(window.location.search);
-        const domain = params.get('domain');
+        const pid = params.get('id'); // Get by ID now for accuracy
+        const panels = JSON.parse(localStorage.getItem('db_panels')) || [];
+        const panel = panels.find(p => p.id == pid);
 
-        const panels = JSON.parse(localStorage.getItem('myPanels')) || [];
-        const activePanel = panels.find(p => p.domain === domain);
+        if (!panel) { alert("Panel tidak ditemukan"); window.close(); return; }
 
-        if (!activePanel) {
-            alert("Panel tidak valid!");
-            window.close();
-            return;
-        }
-
-        // Cek Status Expired
-        if (activePanel.status === 'Expired') {
-            document.getElementById('suspendedOverlay').style.display = 'flex';
+        if (panel.status === 'Expired') {
+            document.getElementById('overlaySuspended').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             return;
         }
 
-        // Tampilkan Data
-        document.getElementById('cpUser').innerText = activePanel.username;
-        document.getElementById('cpUserSide').innerText = activePanel.username;
-        document.getElementById('cpDomain').innerText = activePanel.domain;
-        document.getElementById('cpHome').innerText = activePanel.username;
-        document.getElementById('cpIP').innerText = activePanel.connectedIP || 'Unknown';
-        document.getElementById('cpPanelUrl').innerText = activePanel.connectedDomain || 'Localhost';
-        document.title = "cPanel - " + activePanel.domain;
+        // Fill Data
+        document.getElementById('cpUserDisplay').innerText = panel.user;
+        document.getElementById('cpIp').innerText = panel.nodeIP || '-';
+        document.getElementById('cpUrl').innerText = panel.nodePLTA || '-';
+        document.getElementById('cpEgg').innerText = panel.egg;
+        document.getElementById('consoleEgg').innerText = panel.egg;
+        
+        // Resources Text
+        document.getElementById('limitCpu').innerText = panel.res.cpu + "%";
+        document.getElementById('limitRam').innerText = panel.res.ram + " MB";
+        document.getElementById('limitDisk').innerText = panel.res.disk + " MB";
+        
+        document.title = "Panel - " + panel.user;
     }
 });
 
 // --- HELPER FUNCTIONS ---
 
-function loadServerConfig() {
-    const config = JSON.parse(localStorage.getItem('serverConfig'));
-    const statusPill = document.getElementById('serverStatusDisplay');
-    const sideIP = document.getElementById('sidebarIP');
-    const sideDom = document.getElementById('sidebarDomain');
+function setSession(user, role) {
+    sessionStorage.setItem('activeUser', user);
+    sessionStorage.setItem('activeRole', role);
+    window.location.href = 'dashboard.html';
+}
 
-    if (config && config.ip) {
-        if(document.getElementById('confIP')) document.getElementById('confIP').value = config.ip;
-        if(document.getElementById('confDomain')) document.getElementById('confDomain').value = config.domain;
-        if(statusPill) {
-            statusPill.innerHTML = `<i class="fa-solid fa-link"></i> Connected: ${config.ip}`;
-            statusPill.className = 'server-status-pill online';
+function loadServerInfo() {
+    const conf = JSON.parse(localStorage.getItem('db_server'));
+    if (conf) {
+        if(document.getElementById('sidePLTA')) document.getElementById('sidePLTA').innerText = conf.plta || '-';
+        if(document.getElementById('sideIP')) document.getElementById('sideIP').innerText = conf.ip || '-';
+        
+        if(document.getElementById('confIP')) {
+            document.getElementById('confIP').value = conf.ip;
+            document.getElementById('confPLTA').value = conf.plta;
         }
-        if(sideIP) sideIP.innerText = config.ip;
-        if(sideDom) sideDom.innerText = config.domain;
     }
 }
 
-function renderPanels(role) {
+function renderPanels() {
     const tbody = document.getElementById('panelTableBody');
-    if (!tbody) return;
+    if(!tbody) return;
     tbody.innerHTML = '';
     
-    let panels = JSON.parse(localStorage.getItem('myPanels')) || [];
-    if (panels.length === 0) {
-        document.getElementById('emptyMsgPanel').style.display = 'block';
+    const panels = JSON.parse(localStorage.getItem('db_panels')) || [];
+    if(panels.length === 0) {
+        document.getElementById('emptyPanelMsg').style.display = 'block';
         return;
     }
-    document.getElementById('emptyMsgPanel').style.display = 'none';
+    document.getElementById('emptyPanelMsg').style.display = 'none';
+    
+    const role = sessionStorage.getItem('activeRole');
 
     panels.forEach(p => {
-        const badgeClass = p.status === 'Active' ? 'badge-active' : 'badge-expired';
-        const cpanelLink = `cpanel.html?domain=${p.domain}`;
+        const badge = p.status === 'Active' ? 'badge-active' : 'badge-expired';
+        const link = `cpanel.html?id=${p.id}`; // Gunakan ID agar unik
         let deleteBtn = '';
         
         if (role === 'owner' || role === 'admin') {
-            deleteBtn = `<button onclick="deleteItem('myPanels', ${p.id})" class="btn-logout" style="color:red; border-color:red;"><i class="fa-solid fa-trash"></i></button>`;
+            deleteBtn = `<button onclick="deleteData('db_panels', ${p.id})" class="btn btn-danger" style="padding: 5px 10px;"><i class="fa-solid fa-trash"></i></button>`;
         }
 
         const row = `
             <tr>
-                <td><strong>${p.domain}</strong></td>
-                <td>${p.username}</td>
-                <td><small>${p.connectedIP || '-'}</small></td>
-                <td><span class="${badgeClass}">${p.status}</span></td>
+                <td><strong>${p.user}</strong></td>
+                <td><code>${p.pass}</code></td>
+                <td style="font-size:11px;">
+                    C:${p.res.cpu}% | R:${p.res.ram}MB | D:${p.res.disk}MB
+                </td>
+                <td><span class="badge" style="background:var(--border); color:var(--text-main);">${p.egg}</span></td>
+                <td><span class="badge ${badge}">${p.status}</span></td>
                 <td style="display:flex; gap:5px;">
-                    <a href="${cpanelLink}" target="_blank" class="btn-logout" style="color:#3498db; border-color:#3498db;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    <a href="${link}" target="_blank" class="btn btn-primary" style="padding: 5px 10px;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     ${deleteBtn}
                 </td>
             </tr>
@@ -229,36 +256,46 @@ function renderPanels(role) {
     });
 }
 
-function renderStaff() {
+function renderStaffs() {
     const tbody = document.getElementById('userTableBody');
-    if (!tbody) return;
     tbody.innerHTML = '';
-    let staff = JSON.parse(localStorage.getItem('myStaff')) || [];
-    if (staff.length === 0) { document.getElementById('emptyMsgUser').style.display = 'block'; return; }
-    document.getElementById('emptyMsgUser').style.display = 'none';
-
-    staff.forEach(s => {
-        const row = `<tr><td>${s.username}</td><td>${s.role}</td><td>${s.password}</td><td><button onclick="deleteItem('myStaff', ${s.id})" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-        tbody.innerHTML += row;
+    const staffs = JSON.parse(localStorage.getItem('db_staffs')) || [];
+    
+    staffs.forEach(s => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${s.username}</td>
+                <td><code>${s.password}</code></td>
+                <td>${s.role}</td>
+                <td><button onclick="deleteData('db_staffs', ${s.id})" class="btn btn-danger" style="padding: 5px 10px;"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+        `;
     });
 }
 
-window.deleteItem = function(key, id) {
-    if(confirm('Hapus item ini?')) {
-        let items = JSON.parse(localStorage.getItem(key)) || [];
-        items = items.filter(i => i.id !== id);
-        localStorage.setItem(key, JSON.stringify(items));
-        location.reload(); 
+// Global Window Functions (untuk onClick di HTML)
+window.switchTab = function(tabName, el) {
+    document.querySelectorAll('.tab-content').forEach(d => d.classList.add('hidden'));
+    document.getElementById('tab-' + tabName).classList.remove('hidden');
+    
+    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+    if(el) el.classList.add('active');
+    
+    if(tabName === 'users') renderStaffs();
+};
+
+window.openModal = (id) => document.getElementById(id).classList.add('show');
+window.closeModal = (id) => document.getElementById(id).classList.remove('show');
+
+window.deleteData = (key, id) => {
+    if(confirm('Hapus data ini?')) {
+        let data = JSON.parse(localStorage.getItem(key)) || [];
+        data = data.filter(item => item.id !== id);
+        localStorage.setItem(key, JSON.stringify(data));
+        location.reload();
     }
 };
 
-window.switchTab = function(tabName) {
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    document.getElementById('section-' + tabName).style.display = 'block';
-    document.querySelectorAll('.menu-list a').forEach(a => a.classList.remove('active'));
-    document.getElementById('tab-' + tabName).classList.add('active');
-    if(tabName === 'users') renderStaff();
+window.onclick = (e) => {
+    if(e.target.classList.contains('modal')) e.target.classList.remove('show');
 };
-
-window.showModal = (id) => document.getElementById(id).style.display = 'block';
-window.closeModal = (id) => document.getElementById(id).style.display = 'none';
