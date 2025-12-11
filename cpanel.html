@@ -3,81 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cPanel Home</title>
+    <title>Panel Control</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="cpanel-body">
+<body>
 
-    <!-- OVERLAY JIKA EXPIRED -->
-    <div id="suspendedOverlay" class="suspended-overlay">
-        <div class="suspended-box">
-            <i class="fa-solid fa-ban fa-4x"></i>
-            <h1>ACCOUNT SUSPENDED</h1>
-            <p>Akun ini telah dinonaktifkan karena masa aktif habis (Expired).</p>
-            <p><small>Silakan hubungi Owner untuk perpanjangan layanan.</small></p>
-            <button onclick="window.close()" class="btn-close-overlay">Tutup Halaman</button>
-        </div>
+    <!-- OVERLAY SUSPENDED -->
+    <div id="overlaySuspended" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; color:var(--accent); flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+        <i class="fa-solid fa-triangle-exclamation fa-5x"></i>
+        <h1 style="margin: 20px 0;">PANEL SUSPENDED / EXPIRED</h1>
+        <p style="color: #fff;">Silakan hubungi administrator untuk memperpanjang layanan.</p>
+        <button onclick="window.close()" class="btn btn-outline" style="margin-top: 20px; border-color: #fff; color: #fff;">Tutup Halaman</button>
     </div>
 
-    <header class="cpanel-header">
+    <header>
         <div class="logo">
-            <i class="fa-brands fa-cpanel fa-2x"></i> <span>cPanel</span>
+            <i class="fa-brands fa-cpanel fa-lg"></i> <span>ClientPanel</span>
         </div>
-        <div class="user-info">
-            <span><i class="fa-solid fa-user-circle"></i> <b id="cpUser">loading...</b></span>
-            <button onclick="window.close()" class="logout-btn">Keluar</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="cpUserDisplay" style="font-weight: bold;">User</span>
+            <button id="themeToggle" class="btn btn-outline"><i class="fa-solid fa-moon"></i></button>
+            <button onclick="window.close()" class="btn btn-danger">Keluar</button>
         </div>
     </header>
 
     <div class="container">
+        <!-- SIDEBAR INFO -->
         <aside class="sidebar">
-            <div class="info-box">
-                <h3>GENERAL INFORMATION</h3>
-                <ul class="info-list">
-                    <li><i class="fa-solid fa-user"></i> <span id="cpUserSide">...</span></li>
-                    <li><i class="fa-solid fa-globe"></i> <span id="cpDomain">...</span></li>
-                    
-                    <!-- INFO KONEKSI SERVER -->
-                    <li style="border-top:1px solid #eee; padding-top:10px; margin-top:10px;">
-                        <i class="fa-solid fa-server"></i> 
-                        <span style="font-size:11px; color:#555;">Shared IP Address</span><br>
-                        <strong id="cpIP" style="margin-left:24px;">...</strong>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-link"></i> 
-                        <span style="font-size:11px; color:#555;">Server Panel (PLTA)</span><br>
-                        <strong id="cpPanelUrl" style="margin-left:24px;">...</strong>
-                    </li>
+            <div class="card">
+                <h4 style="margin:0 0 15px 0; border-bottom:1px solid var(--border); padding-bottom:10px;">Server Information</h4>
+                
+                <div style="margin-bottom: 10px;">
+                    <div style="color:var(--text-muted); font-size:11px;">EGG TYPE</div>
+                    <div id="cpEgg" style="font-weight:bold; color:var(--secondary);">Loading...</div>
+                </div>
 
-                    <li style="margin-top:10px;"><i class="fa-solid fa-house"></i> /home/<span id="cpHome">...</span></li>
-                </ul>
+                <div style="margin-bottom: 10px;">
+                    <div style="color:var(--text-muted); font-size:11px;">NODE IP</div>
+                    <div id="cpIp" style="font-weight:bold; color:var(--success);">Loading...</div>
+                </div>
+                
+                <div style="margin-bottom: 10px;">
+                    <div style="color:var(--text-muted); font-size:11px;">PLTA CONNECTION</div>
+                    <div id="cpUrl" style="font-weight:bold; font-size:11px; word-break:break-all;">Loading...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 style="margin:0 0 15px 0;">Resources Limit</h4>
+                
+                <div style="margin-bottom: 10px;">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>CPU</span> <span id="limitCpu">0%</span>
+                    </div>
+                    <div class="res-bar-bg"><div class="res-bar-fill" style="width: 20%;"></div></div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>RAM</span> <span id="limitRam">0MB</span>
+                    </div>
+                    <div class="res-bar-bg"><div class="res-bar-fill" style="width: 45%;"></div></div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>DISK</span> <span id="limitDisk">0MB</span>
+                    </div>
+                    <div class="res-bar-bg"><div class="res-bar-fill" style="width: 10%;"></div></div>
+                </div>
             </div>
         </aside>
 
+        <!-- MAIN CONTENT -->
         <main class="main-content">
-            <div class="search-bar">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" placeholder="Search tools (e.g. email, file)...">
-            </div>
-
-            <div class="section-group">
-                <h2 class="section-title">FILES</h2>
-                <div class="grid-container">
-                    <div class="grid-item"><i class="fas fa-folder"></i><span>File Manager</span></div>
-                    <div class="grid-item"><i class="fas fa-images"></i><span>Images</span></div>
-                    <div class="grid-item"><i class="fas fa-hdd"></i><span>Disk Usage</span></div>
-                    <div class="grid-item"><i class="fas fa-file-shield"></i><span>Backup</span></div>
+            <div class="card" style="margin-bottom: 20px;">
+                <h3 style="margin-top:0;">Console</h3>
+                <div style="background: #111; color: #0f0; padding: 15px; border-radius: 6px; font-family: monospace; height: 150px; overflow-y: auto;">
+                    [System] Connecting to Node...<br>
+                    [System] Authenticating user...<br>
+                    [System] Pulling Docker image for <span id="consoleEgg" style="color:#fff"></span>...<br>
+                    [System] Container Ready.<br>
+                    user@server:~$ _
                 </div>
             </div>
 
-            <div class="section-group">
-                <h2 class="section-title">DATABASES</h2>
-                <div class="grid-container">
-                    <div class="grid-item"><i class="fas fa-database"></i><span>phpMyAdmin</span></div>
-                    <div class="grid-item"><i class="fas fa-server"></i><span>MySQL DB</span></div>
-                    <div class="grid-item"><i class="fas fa-wand-magic-sparkles"></i><span>DB Wizard</span></div>
-                </div>
+            <div class="grid-cpanel">
+                <div class="cpanel-item"><i class="fa-solid fa-folder fa-2x"></i><br>File Manager</div>
+                <div class="cpanel-item"><i class="fa-solid fa-database fa-2x"></i><br>Database</div>
+                <div class="cpanel-item"><i class="fa-solid fa-calendar fa-2x"></i><br>Schedules</div>
+                <div class="cpanel-item"><i class="fa-solid fa-users fa-2x"></i><br>Users</div>
+                <div class="cpanel-item"><i class="fa-solid fa-network-wired fa-2x"></i><br>Network</div>
+                <div class="cpanel-item"><i class="fa-solid fa-terminal fa-2x"></i><br>Startup</div>
+                <div class="cpanel-item"><i class="fa-solid fa-box-archive fa-2x"></i><br>Backups</div>
+                <div class="cpanel-item"><i class="fa-solid fa-gear fa-2x"></i><br>Settings</div>
             </div>
         </main>
     </div>
