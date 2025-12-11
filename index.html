@@ -11,15 +11,15 @@
 
     <div class="login-container">
         <div class="login-header">
-            <i class="fa-solid fa-server fa-3x"></i>
-            <h2>Secure Login</h2>
-            <p>Masuk ke Dashboard Management</p>
+            <i class="fa-solid fa-user-shield fa-3x"></i>
+            <h2>Secure Access</h2>
+            <p>Silakan login untuk melanjutkan</p>
         </div>
         
         <form id="loginForm">
             <div class="input-group">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="loginUser" placeholder="Username" required>
+                <i class="fa-solid fa-envelope"></i>
+                <input type="text" id="loginUser" placeholder="Email / Username" required>
             </div>
             
             <div class="input-group">
@@ -27,21 +27,12 @@
                 <input type="password" id="loginPass" placeholder="Password" required>
             </div>
 
-            <div class="input-group">
-                <i class="fa-solid fa-user-tag"></i>
-                <select id="loginRole">
-                    <option value="owner">Owner</option>
-                    <option value="admin">Admin</option>
-                    <option value="reseller">Reseller</option>
-                </select>
-            </div>
+            <!-- Role otomatis dideteksi berdasarkan akun, jadi dropdown dihapus agar lebih aman -->
 
             <button type="submit" class="btn-login">
                 <span>MASUK SEKARANG</span>
-                <div class="wave"></div>
             </button>
         </form>
-        <p class="login-footer">Demo: Username bebas, Password bebas</p>
     </div>
 
     <script src="script.js"></script>
