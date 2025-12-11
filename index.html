@@ -3,193 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Management</title>
+    <title>Secure Login - Hosting Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="login-body">
 
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-network-wired"></i> <span>MasterControl</span>
-        </div>
-        <div class="user-info">
-            <div id="serverStatusDisplay" class="server-status-pill offline">
-                <i class="fa-solid fa-circle-nodes"></i> Disconnected
+    <div class="login-container">
+        <div class="login-header">
+            <div class="icon-circle">
+                <i class="fa-solid fa-fingerprint fa-2x"></i>
             </div>
-            <span id="displayRole" class="role-badge">...</span>
-            <span id="displayUser">...</span>
-            <button id="logoutBtn" class="btn-logout" title="Logout"><i class="fa-solid fa-power-off"></i></button>
+            <h2>Authentication</h2>
+            <p>Panel Management System</p>
         </div>
-    </header>
-
-    <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="info-box">
-                <h3>NAVIGASI UTAMA</h3>
-                <ul class="menu-list">
-                    <li onclick="switchTab('panels')">
-                        <a href="#" id="tab-panels" class="active"><i class="fa-solid fa-server"></i> Kelola Panel</a>
-                    </li>
-                    <li id="ownerMenu" style="display:none;" onclick="switchTab('users')">
-                        <a href="#" id="tab-users"><i class="fa-solid fa-users-gear"></i> Kelola Staff</a>
-                    </li>
-                    <!-- MENU BARU: Server Config -->
-                    <li id="serverMenu" onclick="switchTab('server')">
-                        <a href="#" id="tab-server"><i class="fa-solid fa-gears"></i> Konfigurasi VPS</a>
-                    </li>
-                </ul>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="text" id="loginUser" placeholder="Email / Username" required autocomplete="off">
             </div>
             
-            <div class="info-box">
-                <h3>ACTIVE SERVER</h3>
-                <div class="stat-item">
-                    <span>IP VPS:</span> <strong id="sidebarIP" style="color:#27ae60;">-</strong>
-                </div>
-                <div class="stat-item">
-                    <span>Domain Panel:</span> <strong id="sidebarDomain" style="color:#2980b9;">-</strong>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            
-            <!-- SECTION 1: KELOLA PANEL -->
-            <div id="section-panels" class="tab-content">
-                <div class="header-action">
-                    <h2>Daftar Website / Panel</h2>
-                    <div class="btn-group">
-                        <button id="cleanExpBtn" class="btn-danger" style="display:none;">
-                            <i class="fa-solid fa-broom"></i> Hapus Expired
-                        </button>
-                        <button id="openPanelModal" class="btn-create">
-                            <i class="fa-solid fa-plus"></i> Buat Panel Baru
-                        </button>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Domain</th>
-                                <th>Username</th>
-                                <th>Connected To (IP)</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="panelTableBody"></tbody>
-                    </table>
-                    <p id="emptyMsgPanel" class="empty-msg">Belum ada data panel.</p>
-                </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPass" placeholder="Password" required>
             </div>
 
-            <!-- SECTION 2: KELOLA STAFF -->
-            <div id="section-users" class="tab-content" style="display:none;">
-                <div class="header-action">
-                    <h2>Manajemen Staff</h2>
-                    <button id="openUserModal" class="btn-create">
-                        <i class="fa-solid fa-user-plus"></i> Tambah Staff
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Role</th>
-                                <th>Password</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userTableBody"></tbody>
-                    </table>
-                    <p id="emptyMsgUser" class="empty-msg">Belum ada staff.</p>
-                </div>
-            </div>
-
-            <!-- SECTION 3: KONFIGURASI VPS (BARU) -->
-            <div id="section-server" class="tab-content" style="display:none;">
-                <div class="header-action">
-                    <h2>Koneksi Server & Domain Panel</h2>
-                </div>
-                
-                <div class="info-box" style="max-width: 600px;">
-                    <form id="serverConfigForm">
-                        <div class="form-group">
-                            <label>IP VPS (Server Address)</label>
-                            <input type="text" id="confIP" placeholder="Contoh: 103.145.xxx.xxx" required>
-                            <small style="color:#888;">IP ini akan digunakan sebagai host utama cPanel.</small>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label>Domain Panel / PLTA (Login URL)</label>
-                            <input type="text" id="confDomain" placeholder="Contoh: panel.hostingsaya.com" required>
-                            <small style="color:#888;">Domain ini akan menjadi alamat login dashboard.</small>
-                        </div>
-                        <br>
-                        <button type="submit" class="btn-create" style="width:100%;">
-                            <i class="fa-solid fa-link"></i> HUBUNGKAN SERVER
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- MODAL (Tetap sama seperti sebelumnya, tidak perlu diubah HTML-nya) -->
-    <div id="panelModal" class="modal">
-        <div class="modal-content slide-down">
-            <span class="close-btn" onclick="closeModal('panelModal')">&times;</span>
-            <div class="modal-header"><i class="fa-brands fa-cpanel"></i> Buat Panel Baru</div>
-            <form id="createPanelForm">
-                <div class="form-group">
-                    <label>Domain Website</label>
-                    <input type="text" id="pDomain" placeholder="contoh.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Username Panel</label>
-                    <input type="text" id="pUser" placeholder="user123" required>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="pStatus">
-                        <option value="Active">Active</option>
-                        <option value="Expired">Expired</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-submit">Simpan Data</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal User tetap sama -->
-    <div id="userModal" class="modal">
-        <div class="modal-content slide-down">
-            <span class="close-btn" onclick="closeModal('userModal')">&times;</span>
-            <div class="modal-header"><i class="fa-solid fa-user-shield"></i> Tambah Staff</div>
-            <form id="createUserForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="uName" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="text" id="uPass" required>
-                </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <select id="uRole">
-                        <option value="admin">Admin</option>
-                        <option value="reseller">Reseller</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-submit">Buat Akun</button>
-            </form>
+            <button type="submit" class="btn-login">
+                <span>MASUK SYSTEM</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            <small>Restricted Access Area</small>
         </div>
     </div>
 
