@@ -1,0 +1,133 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel - website-saya.com</title>
+    <!-- Menggunakan Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header / Top Bar -->
+    <header>
+        <div class="logo">
+            <i class="fa-brands fa-cpanel fa-2x"></i> <span>MyHostingPanel</span>
+        </div>
+        <div class="user-info">
+            <span><i class="fa-user"></i> user_demo</span>
+            <a href="#" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Kanan (Informasi Server) -->
+        <aside class="sidebar">
+            <div class="info-box">
+                <h3>GENERAL INFORMATION</h3>
+                <ul>
+                    <li><strong>User:</strong> user_demo</li>
+                    <li><strong>Domain:</strong> website-saya.com</li>
+                    <li><strong>IP Address:</strong> 192.168.1.100</li>
+                    <li><strong>Home Dir:</strong> /home/user_demo</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <h3>STATISTICS</h3>
+                <div class="stat-item">
+                    <span>Disk Usage</span>
+                    <div class="progress-bar"><div class="fill" style="width: 45%;"></div></div>
+                    <small>450 MB / 1 GB</small>
+                </div>
+                <div class="stat-item">
+                    <span>Bandwidth</span>
+                    <div class="progress-bar"><div class="fill" style="width: 20%;"></div></div>
+                    <small>2 GB / 10 GB</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Area Konten Utama -->
+        <main class="main-content">
+            <!-- Kolom Pencarian -->
+            <div class="search-bar">
+                <i class="fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari fitur (misal: email, database)...">
+            </div>
+
+            <!-- Bagian: Files -->
+            <div class="section-group">
+                <h2 class="section-title">Files</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-folder"></i><span class="item-name">File Manager</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-image"></i><span class="item-name">Images</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-hdd"></i><span class="item-name">Disk Usage</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-user-lock"></i><span class="item-name">Directory Privacy</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian: Databases -->
+            <div class="section-group">
+                <h2 class="section-title">Databases</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-database"></i><span class="item-name">phpMyAdmin</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-server"></i><span class="item-name">MySQL Databases</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-magic"></i><span class="item-name">MySQL Wizard</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian: Domains -->
+            <div class="section-group">
+                <h2 class="section-title">Domains</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-globe"></i><span class="item-name">Site Publisher</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-link"></i><span class="item-name">Domains</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-random"></i><span class="item-name">Redirects</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian: Email -->
+            <div class="section-group">
+                <h2 class="section-title">Email</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-envelope"></i><span class="item-name">Email Accounts</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-share"></i><span class="item-name">Forwarders</span></a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="#"><i class="fas fa-filter"></i><span class="item-name">Spam Filters</span></a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
